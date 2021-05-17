@@ -19,12 +19,10 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
         public TKey Key;
         public TValue Value;
         public SerializableKeyValuePair (TKey key, TValue value) {
-            Key   = key;
+            Key = key;
             Value = value;
         }
-        public void SetValue (TValue value) {
-            Value = value;
-        }
+        public void SetValue (TValue value) => Value = value;
     }
     Dictionary<TKey, uint> KeyPositions => _keyPositions.Value;
     Lazy<Dictionary<TKey, uint>> _keyPositions;
@@ -37,7 +35,7 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
         return result;
     }
     public void OnBeforeSerialize() {}
-    public void OnAfterDeserialize() =>  _keyPositions = new Lazy<Dictionary<TKey, uint>>(MakeKeyPositions);
+    public void OnAfterDeserialize() => _keyPositions = new Lazy<Dictionary<TKey, uint>>(MakeKeyPositions);
  
 #region IDictionary<TKey, TValue>
     public TValue this[TKey key] {
@@ -51,7 +49,7 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
             }
         }
     }
-    public ICollection<TKey>   Keys   => list.Select( tuple => tuple.Key ).ToArray();
+    public ICollection<TKey> Keys => list.Select( tuple => tuple.Key ).ToArray();
     public ICollection<TValue> Values => list.Select( tuple => tuple.Value ).ToArray();
     public void Add(TKey key, TValue value) {
         if (KeyPositions.ContainsKey(key))
@@ -66,8 +64,8 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
         if (KeyPositions.TryGetValue(key, out uint index)) {
             var kp = KeyPositions;
             kp.Remove(key);
-            var numEntries = list.Count;
-            list.RemoveAt( (int) index );
+            _ = list.Count;
+            list.RemoveAt((int) index);
             return true;
         }
         else return false;
@@ -84,10 +82,10 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
     }
 #endregion
 #region ICollection <KeyValuePair<TKey, TValue>>
-    public int  Count      => list.Count;
+    public int Count => list.Count;
     public bool IsReadOnly => false;
     public void Add (KeyValuePair<TKey, TValue> kvp) => Add( kvp.Key, kvp.Value );
-    public void Clear    ()                               => list.Clear();
+    public void Clear () => list.Clear();
     public bool Contains (KeyValuePair<TKey, TValue> kvp) => KeyPositions.ContainsKey(kvp.Key);
     public void CopyTo (KeyValuePair<TKey, TValue>[] array, int arrayIndex) {
         var numKeys = list.Count;
@@ -103,8 +101,7 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionary, ISer
 #region IEnumerable <KeyValuePair<TKey, TValue>>
     public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator () {
         return list.Select(ToKeyValuePair).GetEnumerator();
- 
-        KeyValuePair<TKey, TValue> ToKeyValuePair (SerializableKeyValuePair skvp) {
+        static KeyValuePair<TKey, TValue> ToKeyValuePair (SerializableKeyValuePair skvp) {
             return new KeyValuePair<TKey, TValue>( skvp.Key, skvp.Value );
         }
     }
