@@ -16,12 +16,12 @@ namespace Utilities {
         public static void CancelAllTimers() {
             foreach (var timer in timers) {
                 timer.Cancel();
-            };
+            }
         }
         public static void ForceCompleteAllTimers() {
             foreach (var timer in timers) {
                 timer.ForceComplete();
-            };
+            }
         }
         void RemoveCompletedTimers (ref List<TimerInstance> timerList) {
             if (timerList == null || timerList.Count == 0) return;
@@ -32,7 +32,6 @@ namespace Utilities {
             timerList = tempList;
         }
         public static bool IsRunning(TimerInstance timer) => timers.Contains(timer);
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void StartUp() => Instance.Initialize();
         void Initialize(){}

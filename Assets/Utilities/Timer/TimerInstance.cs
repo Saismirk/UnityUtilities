@@ -7,8 +7,8 @@ namespace Utilities {
         public float Delay {get; private set;}
         public bool IsPaused {get; private set;}
         public TimerInstance (float duration, float delay = 0) {
-            this.TimeLeft = duration;
-            this.Delay = delay;
+            TimeLeft = duration;
+            Delay = delay;
             Timer.timers.Add(this);
         }
         public void Tick(float time) {
@@ -30,11 +30,8 @@ namespace Utilities {
             TimeLeft = -0.1f;
             OnTimeUp?.Invoke();
         }
-        public void Pause() {
-            IsPaused = true;
-        }
-        public void Resume() {
-            IsPaused = false;
-        }
+        public void Pause() => IsPaused = true;
+        public void Resume() => IsPaused = false;
+        
     }
 }
