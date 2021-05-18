@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 namespace Utilities {
     public class Timer : Singleton<Timer> {
         public static List<TimerInstance> timers =  new List<TimerInstance>();
